@@ -67,7 +67,7 @@ function initializeVisualization(ageGroupData, fullData) {
     // Create SVG for the main chart
     const svg = container.append("svg")
         .attr("width", 800)
-        .attr("height", 550); // Increased height to accommodate better spacing
+        .attr("height", 550);
     
     // Prepare data for the bar chart - SORT THE AGE GROUPS NUMERICALLY
     const ageGroupCounts = Object.keys(ageGroupData)
@@ -93,7 +93,7 @@ function initializeVisualization(ageGroupData, fullData) {
         .domain([0, d3.max(ageGroupCounts, d => d.count)])
         .range([450, 50]);
     
-    // Create bars
+    // Create bars with blue color #75D3FA
     svg.selectAll(".age-bar")
         .data(ageGroupCounts)
         .enter()
@@ -103,7 +103,9 @@ function initializeVisualization(ageGroupData, fullData) {
         .attr("y", d => yScale(d.count))
         .attr("width", xScale.bandwidth())
         .attr("height", d => 450 - yScale(d.count))
-        .attr("fill", d => d.count === 0 ? "#cccccc" : "steelblue") // Gray for empty groups
+        .attr("fill", d => d.count === 0 ? "#cccccc" : "#0D6094") // Blue bars for data, gray for empty
+        .attr("stroke", "#296A94")
+        .attr("stroke-width", 0)
         .on("click", function(event, d) {
             if (d.count > 0) { // Only show details if there's data
                 showAgeGroupDetails(d.ageGroup, ageGroupData[d.ageGroup]);
@@ -119,31 +121,42 @@ function initializeVisualization(ageGroupData, fullData) {
         .append("text")
         .attr("class", "bar-label")
         .attr("x", d => xScale(d.ageGroup) + xScale.bandwidth() / 2)
-        .attr("y", d => yScale(d.count) - 5)
+        .attr("y", d => yScale(d.count) - 8)
         .attr("text-anchor", "middle")
         .text(d => d.count)
         .style("font-size", "12px")
         .style("font-weight", "bold")
-        .style("fill", d => d.count === 0 ? "#999999" : "black");
+        .style("fill", "#333");
     
-    // Add axes
+    // Add axes with dark text
     svg.append("g")
         .attr("transform", "translate(0,450)")
-        .call(d3.axisBottom(xScale));
+        .call(d3.axisBottom(xScale))
+        .style("color", "#333")
+        .selectAll("text")
+        .style("fill", "#333");
         
     svg.append("g")
         .attr("transform", "translate(80,0)") // Adjusted for increased left margin
-        .call(d3.axisLeft(yScale));
+        .call(d3.axisLeft(yScale))
+        .style("color", "#333")
+        .selectAll("text")
+        .style("fill", "#333");
     
-    // Add Y-axis label 
+    // Style the axis lines
+    svg.selectAll(".domain, .tick line")
+        .style("stroke", "#000000");
+    
+    // Add Y-axis label with better positioning
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 10) // Moved further left
+        .attr("y", 10) // Moved further left (smaller number = further left)
         .attr("x", -200) // Centered vertically
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .style("font-size", "14px")
         .style("font-weight", "bold")
+        .style("fill", "#333")
         .text("Number of People");
         
     // Add X-axis label
@@ -154,17 +167,8 @@ function initializeVisualization(ageGroupData, fullData) {
         .style("text-anchor", "middle")
         .style("font-size", "14px")
         .style("font-weight", "bold")
+        .style("fill", "#333")
         .text("Age Group");
-    
-    // Add note about empty age groups
-    if (ageGroupCounts.some(d => d.count === 0)) {
-        container.append("p")
-            .style("text-align", "center")
-            .style("color", "#666")
-            .style("font-size", "12px")
-            .style("margin-top", "10px")
-            .text("Note: Gray bars indicate age groups with no survey data");
-    }
 }
 
 function showAgeGroupDetails(ageGroup, data) {
@@ -186,7 +190,8 @@ function showAgeGroupDetails(ageGroup, data) {
     
     // Add title
     detailsContainer.append("h2")
-        .text(`Exercise Details for Age Group: ${ageGroup}`);
+        .text(`Exercise Details for Age Group: ${ageGroup}`)
+        .style("color", "#333");
     
     // Count exercises
     const exerciseCounts = {};
