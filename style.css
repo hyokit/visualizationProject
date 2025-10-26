@@ -2,7 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: white;
+    color: #333;
 }
 
 header {
@@ -11,7 +12,7 @@ header {
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #296A94;
 }
 
 .header-buttons {
@@ -19,70 +20,66 @@ header {
     gap: 15px;
 }
 
-.doc-link {
-    background-color: #4CAF50;
+.doc-link, .youtube-link {
+    background-color: #296A94;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 20px;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    border: 2px solid #296A94;
 }
 
-.doc-link:hover {
-    background-color: #45a049;
+.doc-link:hover, .youtube-link:hover {
+    background-color: #FFBF3B;
+    color: #333;
     transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.youtube-link {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.youtube-link:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(255, 191, 59, 0.3);
+    border-color: #FFBF3B;
 }
 
 .age-bar:hover {
-    fill: #ff7f0e;
+    fill: #FFBF3B;
     cursor: pointer;
 }
 
 #details-container {
     margin-top: 20px;
-    padding: 20px;
-    background-color: white;
+    padding: 25px;
+    background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #333;
+    border: 1px solid #ddd;
 }
 
 .exercise-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    color: #333;
 }
 
 .exercise-table th, .exercise-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
+    color: #333;
 }
 
 .exercise-table th {
-    background-color: #f2f2f2;
+    background-color: #296A94;
     font-weight: bold;
+    color: white;
 }
 
 .exercise-table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.exercise-table tr:nth-child(odd) {
+    background-color: white;
 }
 
 .exercise-table tr:hover {
@@ -90,21 +87,25 @@ header {
 }
 
 button {
-    background-color: #008CBA;
+    background-color: #296A94;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     margin-bottom: 15px;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid #296A94;
 }
 
 button:hover {
-    background-color: #007B9A;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background-color: #FFBF3B;
+    color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 191, 59, 0.3);
+    border-color: #FFBF3B;
 }
 
 .documentation-content {
@@ -114,6 +115,8 @@ button:hover {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #333;
+    border: 1px solid #ddd;
 }
 
 .documentation-content section {
@@ -122,34 +125,56 @@ button:hover {
 
 .documentation-content h2 {
     color: #333;
-    border-bottom: 2px solid #4CAF50;
+    border-bottom: 2px solid #296A94;
     padding-bottom: 10px;
 }
 
 .documentation-content h3 {
-    color: #555;
+    color: #296A94;
 }
 
 .bar-label {
     font-size: 12px;
     font-weight: bold;
+    fill: #333;
 }
 
 .summary-stats {
     margin-top: 20px;
-    padding: 15px;
+    padding: 20px;
     background-color: #f8f9fa;
-    border-radius: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    color: #333;
 }
 
 .summary-stats h3 {
-    color: #333;
+    color: #296A94;
     margin-top: 0;
+    border-bottom: 1px solid #296A94;
+    padding-bottom: 10px;
 }
 
 .summary-stats p {
-    margin: 8px 0;
-    color: #555;
+    margin: 10px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Chart text styling */
+text {
+    fill: #333;
+}
+
+/* Axis styling */
+.axis path,
+.axis line {
+    stroke: #75D3FA;
+}
+
+.axis text {
+    fill: #333;
+    font-size: 12px;
 }
 
 /* Responsive design for smaller screens */
@@ -162,9 +187,33 @@ button:hover {
     
     .header-buttons {
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     body {
-        padding: 10px;
+        padding: 15px;
     }
+    
+    .doc-link, .youtube-link {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #296A94;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #FFBF3B;
 }
