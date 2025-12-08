@@ -1,4 +1,4 @@
-// Load and parse the data from data.csv
+// Load the data from csv
 d3.csv("data.csv").then(function(data) {
     console.log("Data loaded from data.csv:", data);
     
@@ -10,7 +10,7 @@ d3.csv("data.csv").then(function(data) {
     const ageGroupData = createAgeGroups(cleanedData);
     console.log("Age groups:", ageGroupData);
     
-    // Initialize the visualization
+    // visualization
     initializeVisualization(ageGroupData, cleanedData);
     
 }).catch(function(error) {
@@ -21,7 +21,7 @@ d3.csv("data.csv").then(function(data) {
 function cleanData(data) {
     return data.map(d => {
         return {
-            age: +d.Age, // Convert to number
+            age: +d.Age, 
             exercise: d.Exercise,
             calories: +d.Calories,
             benefit: d.Benefit,
@@ -31,7 +31,7 @@ function cleanData(data) {
 }
 
 function createAgeGroups(data) {
-    // Define age groups (0-9, 10-19, 20-29, etc.)
+    // Define age gps
     const ageGroups = {};
     
     data.forEach(d => {
@@ -44,7 +44,6 @@ function createAgeGroups(data) {
         ageGroups[groupKey].push(d);
     });
     
-    // Ensure 0-9 age group exists even if empty
     if (!ageGroups['0-9']) {
         ageGroups['0-9'] = [];
     }
@@ -55,45 +54,43 @@ function createAgeGroups(data) {
 function initializeVisualization(ageGroupData, fullData) {
     const container = d3.select("#visualization-container");
     
-    // Clear any existing content
     container.html("");
     
-    // Create title for the chart
+    // title for the chart
     container.append("h2")
         .text("Number of People Surveyed by Age Group")
         .style("text-align", "center")
         .style("color", "#333");
     
-    // Create SVG for the main chart
     const svg = container.append("svg")
         .attr("width", 800)
         .attr("height", 550);
     
-    // Prepare data for the bar chart - SORT THE AGE GROUPS NUMERICALLY
+    // data for the bar chart
     const ageGroupCounts = Object.keys(ageGroupData)
         .map(group => {
             return {
                 ageGroup: group,
                 count: ageGroupData[group].length,
-                // Extract the starting age for sorting (the number before the dash)
+
                 sortKey: parseInt(group.split('-')[0])
             };
         })
-        .sort((a, b) => a.sortKey - b.sortKey); // Sort by the starting age
+        .sort((a, b) => a.sortKey - b.sortKey); 
     
     console.log("Sorted age groups:", ageGroupCounts);
     
-    // Create scales - use the SORTED age groups
+    // scales
     const xScale = d3.scaleBand()
-        .domain(ageGroupCounts.map(d => d.ageGroup)) // Now this is sorted
-        .range([80, 750]) // Increased left margin for Y-axis label
+        .domain(ageGroupCounts.map(d => d.ageGroup)) 
+        .range([80, 750]) // Increased left margin
         .padding(0.1);
         
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(ageGroupCounts, d => d.count)])
         .range([450, 50]);
     
-    // Create bars with blue color #75D3FA
+    // bars
     svg.selectAll(".age-bar")
         .data(ageGroupCounts)
         .enter()
@@ -103,18 +100,18 @@ function initializeVisualization(ageGroupData, fullData) {
         .attr("y", d => yScale(d.count))
         .attr("width", xScale.bandwidth())
         .attr("height", d => 450 - yScale(d.count))
-        .attr("fill", d => d.count === 0 ? "#cccccc" : "#0D6094") // Blue bars for data, gray for empty
+        .attr("fill", d => d.count === 0 ? "#cccccc" : "#0D6094") // Blue for data, gray for empty
         .attr("stroke", "#296A94")
         .attr("stroke-width", 0)
         .on("click", function(event, d) {
-            if (d.count > 0) { // Only show details if there's data
+            if (d.count > 0) { 
                 showAgeGroupDetails(d.ageGroup, ageGroupData[d.ageGroup]);
             }
         })
         .style("cursor", d => d.count > 0 ? "pointer" : "default")
         .style("opacity", d => d.count > 0 ? 1 : 0.6);
     
-    // Add bar labels for count
+    // labels
     svg.selectAll(".bar-label")
         .data(ageGroupCounts)
         .enter()
@@ -128,7 +125,7 @@ function initializeVisualization(ageGroupData, fullData) {
         .style("font-weight", "bold")
         .style("fill", "#333");
     
-    // Add axes with dark text
+    // axes
     svg.append("g")
         .attr("transform", "translate(0,450)")
         .call(d3.axisBottom(xScale))
@@ -137,21 +134,20 @@ function initializeVisualization(ageGroupData, fullData) {
         .style("fill", "#333");
         
     svg.append("g")
-        .attr("transform", "translate(80,0)") // Adjusted for increased left margin
+        .attr("transform", "translate(80,0)") // increased left margin
         .call(d3.axisLeft(yScale))
         .style("color", "#333")
         .selectAll("text")
         .style("fill", "#333");
     
-    // Style the axis lines
     svg.selectAll(".domain, .tick line")
         .style("stroke", "#000000");
     
-    // Add Y-axis label with better positioning
+    // Y-axis label
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 10) // Moved further left (smaller number = further left)
-        .attr("x", -200) // Centered vertically
+        .attr("y", 10) 
+        .attr("x", -200) 
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .style("font-size", "14px")
@@ -159,9 +155,9 @@ function initializeVisualization(ageGroupData, fullData) {
         .style("fill", "#333")
         .text("Number of People");
         
-    // Add X-axis label
+    // X-axis label
     svg.append("text")
-        .attr("y", 500) // Moved further down
+        .attr("y", 500) 
         .attr("x", 400)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -172,23 +168,22 @@ function initializeVisualization(ageGroupData, fullData) {
 }
 
 function showAgeGroupDetails(ageGroup, data) {
-    // Clear previous details
+   
     d3.select("#details-container").remove();
     
     const container = d3.select("#visualization-container");
     
-    // Create details container
     const detailsContainer = container.append("div")
         .attr("id", "details-container");
     
-    // Add back button
+    // back but
     detailsContainer.append("button")
         .text("← Back to Overview")
         .on("click", function() {
             d3.select("#details-container").remove();
         });
     
-    // Add title
+    // title
     detailsContainer.append("h2")
         .text(`Exercise Details for Age Group: ${ageGroup}`)
         .style("color", "#333");
@@ -202,7 +197,7 @@ function showAgeGroupDetails(ageGroup, data) {
         exerciseCounts[d.exercise]++;
     });
     
-    // Convert to array and sort by popularity
+    // sort by popularity
     const sortedExercises = Object.keys(exerciseCounts).map(exercise => {
         return {
             exercise: exercise,
@@ -213,11 +208,11 @@ function showAgeGroupDetails(ageGroup, data) {
         };
     }).sort((a, b) => b.count - a.count);
     
-    // Create table
+    // table
     const table = detailsContainer.append("table")
         .attr("class", "exercise-table");
     
-    // Add header
+    // header
     const header = table.append("thead").append("tr");
     header.append("th").text("Exercise");
     header.append("th").text("Popularity");
@@ -225,7 +220,7 @@ function showAgeGroupDetails(ageGroup, data) {
     header.append("th").text("Benefit");
     header.append("th").text("Difficulty");
     
-    // Add rows
+    // rows
     const body = table.append("tbody");
     
     sortedExercises.forEach(exercise => {
@@ -237,7 +232,7 @@ function showAgeGroupDetails(ageGroup, data) {
         row.append("td").text(exercise.difficulty);
     });
     
-    // Add summary statistics
+    // summary stast
     const totalPeople = data.length;
     const uniqueExercises = sortedExercises.length;
     const avgCalories = d3.mean(data, d => d.calories);
