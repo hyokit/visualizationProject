@@ -177,7 +177,6 @@ text {
     font-size: 12px;
 }
 
-/* Responsive design for smaller screens */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -200,7 +199,6 @@ text {
     }
 }
 
-/* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar {
     width: 8px;
 }
